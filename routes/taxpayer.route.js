@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 
-const service = require('../services/employee.service')
+const service = require('../services/taxpayer.service')
 
 //http://localhost:3000/api/employees/
 router.get('/', async (req, res) => {
@@ -57,6 +57,11 @@ router.put('/:id', async (req, res) => {
         res.status(404).json('no record with given id : ' + req.params.id)
     else
         res.send('updated successfully.')
+})
+
+router.post('/register',async (req,res)=>{
+    await service.addTaxpayer(req.body)
+    res.status(201).send('created successfully.')
 })
 
 

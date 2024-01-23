@@ -21,19 +21,29 @@ module.exports.deleteEmployee = async (id) => {
   return affectedRows;
 };
 
-// module.exports.addOrEditEmployee = async (obj, id = 0) => {
-//   const [[[{ affectedRows }]]] = await db.query(
-//     "CALL usp_employee_add_or_edit(?,?,?,?)",
-//     [id, obj.name, obj.employee_code, obj.salary]
-//   );
-//   return affectedRows;
-// };
+
 
 module.exports.addEmployee = async (obj, id = 0) => {
   // Insert new employee
   const query =
     "INSERT INTO employees (name, employee_code, salary) VALUES (?, ?, ?)";
   const queryParams = [obj.name, obj.employee_code, obj.salary];
+
+  try {
+    const [result] = await db.query(query, queryParams);
+    // result.insertId will have the ID of the newly inserted row
+    // return result.insertId;
+  } catch (error) {
+    console.error("Error executing SQL query:", error);
+    throw error; // Handle the error as needed
+  }
+};
+
+module.exports.addTaxpayer = async (obj, id = 0) => {
+  // Insert new taxpayer
+  const query =
+    "INSERT INTO details (name,email,password,address,tin,nameofemployer,mobileno,officeno,homeno,birthday) VALUES (?,?,?,?,?,?,?,?,?,?)";
+  const queryParams = [obj.name, obj.email, obj.password,obj.address,obj.tin,obj.nameofemployer,obj.mobileno,obj.officeno,obj.homeno,obj.birthday];
 
   try {
     const [result] = await db.query(query, queryParams);
