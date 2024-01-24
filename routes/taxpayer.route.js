@@ -60,8 +60,14 @@ router.put('/:id', async (req, res) => {
 })
 
 router.post('/register',async (req,res)=>{
-    await service.addTaxpayer(req.body)
-    res.status(201).send('created successfully.')
+    try{
+
+        await service.addTaxpayer(req.body)
+         res.json({Status:"Success"})
+        // res.status(201).send('created successfully !.')
+    }catch(error){
+        res.json({Status:"Falied to register"})
+    }
 })
 
 
