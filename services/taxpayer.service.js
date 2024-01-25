@@ -38,6 +38,26 @@ module.exports.addEmployee = async (obj, id = 0) => {
   }
 };
 
+
+
+module.exports.updateEmployee = async (obj) => {
+  // Update existing employee
+  const query =
+    "UPDATE employees SET name = ?, employee_code = ?, salary = ? WHERE id = ?";
+  const queryParams = [obj.name, obj.employee_code, obj.salary, obj.id];
+
+  try {
+    const [result] = await db.query(query, queryParams);
+    // result.affectedRows will have the number of affected rows
+    console.log(result);
+    return result.affectedRows;
+  } catch (error) {
+    console.error("Error executing SQL query:", error);
+    throw error; // Handle the error as needed
+  }
+};
+
+
 module.exports.addTaxpayer = async (obj) => {
 
 
@@ -48,7 +68,7 @@ module.exports.addTaxpayer = async (obj) => {
     "INSERT INTO details (email,password,name,address,tin,nameofemployer,mobileno,officeno,homeno,birthday) VALUES (?,?,?,?,?,?,?,?,?,?)";
   const queryParams = [
     obj.email,
-    obj.password,
+    hashedPw,
     obj.name,
     obj.address,
     obj.tin,
@@ -67,19 +87,33 @@ module.exports.addTaxpayer = async (obj) => {
   }
 };
 
-module.exports.updateEmployee = async (obj) => {
-  // Update existing employee
+
+module.exports.loginTaxpayer = async (obj) => {
+
+  // Insert new taxpayer
   const query =
-    "UPDATE employees SET name = ?, employee_code = ?, salary = ? WHERE id = ?";
-  const queryParams = [obj.name, obj.employee_code, obj.salary, obj.id];
+    "SELECT * FROM details WHERE email = ?";
+  const queryParams = [
+    obj.email
+  ];
 
   try {
-    const [result] = await db.query(query, queryParams);
-    // result.affectedRows will have the number of affected rows
-    console.log(result);
-    return result.affectedRows;
+    const [[data]] = await db.query(query, queryParams);
+    const isMatch = await bcrypt.compare(obj.password.toString(),data.password)
+    if(!isMatch){
+      throw new Error()
+    }else{
+      return data
+      data
+    }
+    
+
   } catch (error) {
-    console.error("Error executing SQL query:", error);
-    throw error; // Handle the error as needed
+    console.error("Error in login:", error);
+    throw error;
   }
 };
+
+
+
+

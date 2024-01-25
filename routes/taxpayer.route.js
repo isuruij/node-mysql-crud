@@ -70,6 +70,17 @@ router.post('/register',async (req,res)=>{
     }
 })
 
+router.post('/login',async (req,res)=>{
+    try{
+
+        const data = await service.loginTaxpayer(req.body)
+        res.json({Status:"Success",Data:data})
+        //res.status(201).send('created successfully !.')
+    }catch(error){
+        res.json({Status:"Falied to login"})
+    }
+})
+
 
 
 module.exports = router;
