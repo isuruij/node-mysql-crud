@@ -1,5 +1,8 @@
 const express = require('express')
+const cookieParser = require("cookie-parser");
+const jwt = require("jsonwebtoken");
 const router = express.Router()
+const usermiddleware = require("../middleware/userauth")
 
 const service = require('../services/taxpayer.service')
 
@@ -72,14 +75,19 @@ router.post('/register',async (req,res)=>{
 
 router.post('/login',async (req,res)=>{
     try{
-
         const data = await service.loginTaxpayer(req.body)
+        const token = jwt.sign({data},"key")
+        res.cookie("token",token)
         res.json({Status:"Success",Data:data})
         //res.status(201).send('created successfully !.')
     }catch(error){
         res.json({Status:"Falied to login"})
     }
 })
+
+router.get("/auth",usermiddleware.verifyuser, async (req, res) => {
+    res.json({Status:"Success",Data:req.name})
+});
 
 
 
