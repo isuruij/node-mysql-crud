@@ -66,7 +66,10 @@ router.post('/register',async (req,res)=>{
     try{
 
         await service.addTaxpayer(req.body)
-         res.json({Status:"Success"})
+        const data = req.body
+        const token = jwt.sign({data},"key")
+        res.cookie("token",token)
+        res.json({Status:"Success",Data:data})
         // res.status(201).send('created successfully !.')
     }catch(error){
         res.json({Status:"Falied to register"})
