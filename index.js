@@ -7,7 +7,7 @@ const bcrypt = require("bcrypt")
 require("express-async-errors");
 
 const db = require("./db")
-const employeeRoutes = require("./routes/taxpayer.route");
+const taxpayerRoutes = require("./routes/taxpayer.route");
 const app = express()
 app.use(express.json())
 app.use(cookieParser())
@@ -22,7 +22,7 @@ app.use(cors(
 ));
 
 app.use(bodyparser.json());
-app.use("/api/employees", employeeRoutes);
+app.use("/api/taxpayer", taxpayerRoutes);
 app.use((err, req, res, next) => {
   console.log(err);
   res.status(err.status || 500).send("Something went wrong!");
