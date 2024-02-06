@@ -92,6 +92,11 @@ router.get("/auth",usermiddleware.verifyuser, async (req, res) => {
     res.json({Status:"Success",Data:req.name})
 });
 
+router.get("/logout", async (req, res) => {
+    res.clearCookie("token")
+    res.json({Status:"Success",Data:"Logged out"})
+});
+
 
 
 module.exports = router;

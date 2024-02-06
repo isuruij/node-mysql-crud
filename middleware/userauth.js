@@ -8,7 +8,6 @@ module.exports.verifyuser = async (req,res,next)=>{
         console.log(decoded.data.name) 
         req.name = decoded.data.name
         
-
         next()
     }
     catch(e){
